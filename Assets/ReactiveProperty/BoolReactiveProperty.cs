@@ -5,6 +5,8 @@ namespace SB.Util
 {
     public class BoolReactiveProperty : IComparable<BoolReactiveProperty>
     {
+        public event Action<bool> OnValueChanged;
+        
         public bool Value
         {
             get => _value;
@@ -26,7 +28,15 @@ namespace SB.Util
 
         private bool _value;
 
-        public event Action<bool> OnValueChanged;
+        public BoolReactiveProperty()
+        {
+            _value = default;
+        }
+
+        public BoolReactiveProperty(bool value)
+        {
+            _value = value;
+        }
 
         public static bool operator true(BoolReactiveProperty property)
         {

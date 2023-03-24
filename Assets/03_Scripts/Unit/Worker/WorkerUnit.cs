@@ -4,14 +4,18 @@ using UnityEngine;
 
 namespace TRTS.Unit
 {
-    public class WorkerUnit : IUnit, IAbilityUnit
+    public class WorkerUnit : ICharacterUnit
     {
         public Vector3 Position => _unitObject.Position;
 
         public float Size { get; private set; }
 
         public List<IAbility> Abilities { get; } = new();
-        
+
+        public IUnit Target { get; set; }
+
+        public IResource Resource { get; set; }
+
         private readonly GameManager _gameManager;
 
         //private readonly WorkerFsm _ai;
@@ -57,6 +61,11 @@ namespace TRTS.Unit
         public void Update()
         {
             //_ai.Update();
+        }
+
+        public void SetTarget(IUnit target)
+        {
+            Target = target;
         }
     }
 }

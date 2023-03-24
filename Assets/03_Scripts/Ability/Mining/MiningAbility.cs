@@ -1,6 +1,4 @@
-﻿using System;
-using SB;
-using SB.Util;
+﻿using SB.Util;
 using TRTS.Unit;
 using UnityEngine;
 
@@ -34,33 +32,18 @@ namespace TRTS.Ability
 
         public bool IsAvailable()
         {
-            return MinedAmount <= 0 &&
-                   TargetMineral != null &&
-                   TargetMineral.AvailableMining;
+            return true;
         }
 
-        public void Use()
+        public void StartMine()
         {
-            if (!IsAvailable())
+            if (!IsMineralMinable())
             {
                 return;
             }
 
             IsMining.Value = true;
             CurrentMiningTime = 0;
-        }
-        
-        public void SetMine(IUnit owner, MineralUnit mineral)
-        {
-            Owner = owner;
-            TargetMineral = mineral;
-        }
-
-        public bool IsInDistance()
-        {
-            Vector3 distance = Owner.Position - TargetMineral.Position;
-            float mineralDistance = TargetMineral.Size + MineDistance;
-            return distance.sqrMagnitude < mineralDistance * mineralDistance;
         }
 
         public void Update()
@@ -70,7 +53,7 @@ namespace TRTS.Ability
                 return;
             }
 
-            if (!IsAvailable() ||
+            if (!IsMineralMinable() ||
                 !IsInDistance())
             {
                 IsMining.Value = false;
@@ -85,6 +68,37 @@ namespace TRTS.Ability
                 CurrentMiningTime = 0;
                 MinedAmount = TargetMineral.Mining(MiningAmount);
             }
+        }
+        
+        public void SetMine(IUnit owner, MineralUnit mineralUnit)
+        {
+            if (mineralUnit == null)
+            {
+                return;
+            }
+            
+            Owner = owner;
+            TargetMineral = mineralUnit;
+        }
+
+        public bool IsMineralMinable()
+        {
+            return MinedAmount <= 0 &&
+                   TargetMineral != null &&
+                   TargetMineral.AvailableMining;
+        }
+
+        public bool IsInDistance()
+        {
+            Vector3 distance = Owner.Position - TargetMineral.Position;
+            float mineralDistance = Owner.Size + TargetMineral.Size + MineDistance;
+            return distance.sqrMagnitude < mineralDistance * mineralDistance;
+        }
+
+        public void StoreMineral(StoreResourceAbility storeResourceAbility)
+        {
+            storeResourceAbility.StoreMineral(MinedAmount);
+            MinedAmount = 0;
         }
     }
 }

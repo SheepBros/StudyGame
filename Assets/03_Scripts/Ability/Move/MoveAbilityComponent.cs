@@ -1,5 +1,4 @@
-﻿using System;
-using TRTS.Unit;
+﻿using TRTS.Unit;
 using UnityEngine;
 
 namespace TRTS.Ability

@@ -1,5 +1,4 @@
-﻿using TRTS.Unit;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TRTS.Unit
 {

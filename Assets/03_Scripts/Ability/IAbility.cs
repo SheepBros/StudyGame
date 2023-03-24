@@ -1,5 +1,4 @@
-﻿using System;
-using SB;
+﻿using SB;
 using TRTS.Unit;
 
 namespace TRTS.Ability
@@ -9,7 +8,5 @@ namespace TRTS.Ability
         IUnit Owner { get; }
         
         bool IsAvailable();
-        
-        void Use();
     }
 }

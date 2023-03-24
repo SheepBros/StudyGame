@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SB;
 using TRTS.Ability;
 using TRTS.BehaviourTree;
 using TRTS.Unit;
@@ -11,20 +10,18 @@ namespace TRTS.AI
     {
         private GameManager _gameManager;
 
-        private IAbilityUnit _unit;
+        private ICharacterUnit _unit;
 
         private MiningAbility _miningAbility;
 
-        [Inject]
-        public void InjectBindings(GameManager gameManager)
+        private MoveAbility _moveAbility;
+
+        public SearchMineralNode(GameManager gameManager, string name, ICharacterUnit unit) : base(name)
         {
             _gameManager = gameManager;
-        }
-        
-        public SearchMineralNode(IAbilityUnit unit)
-        {
             _unit = unit;
             _miningAbility = _unit.GetAbility<MiningAbility>();
+            _moveAbility = _unit.GetAbility<MoveAbility>();
         }
         
         public override UpdateStatus Update()
@@ -46,7 +43,8 @@ namespace TRTS.AI
                     continue;
                 }
 
-                if (mineral.MiningUnit != null)
+                if (mineral.MiningUnit != null ||
+                    !mineral.AvailableMining)
                 {
                     continue;
                 }
@@ -62,18 +60,16 @@ namespace TRTS.AI
             }
 
             int mineralIndex = Random.Range(0, availableMineList.Count);
-            _miningAbility.SetMine(_unit as IUnit, availableMineList[mineralIndex]);
+            _unit.SetTarget(availableMineList[mineralIndex]);
             return UpdateStatus.Success;
         }
 
         public override void PreUpdate()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void PostUpdate()
         {
-            throw new System.NotImplementedException();
         }
     }
 }

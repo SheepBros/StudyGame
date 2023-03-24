@@ -6,11 +6,13 @@ namespace TRTS.BehaviourTree
     [Serializable]
     public class Selector : NodeBehaviour
     {
-        private List<NodeBehaviour> _childrenList = new();
-
         private NodeBehaviour _runningNode;
 
         private int _runningNodeIndex;
+
+        public Selector(string name) : base(name)
+        {
+        }
         
         public override UpdateStatus Update()
         {
@@ -31,7 +33,7 @@ namespace TRTS.BehaviourTree
 
         public override void PreUpdate()
         {
-            foreach (NodeBehaviour node in _childrenList)
+            foreach (NodeBehaviour node in _nodes)
             {
                 node.PreUpdate();
             }
@@ -39,7 +41,7 @@ namespace TRTS.BehaviourTree
 
         public override void PostUpdate()
         {
-            foreach (NodeBehaviour node in _childrenList)
+            foreach (NodeBehaviour node in _nodes)
             {
                 node.PostUpdate();
             }
@@ -47,9 +49,9 @@ namespace TRTS.BehaviourTree
 
         private UpdateStatus UpdateNode(int startIndex)
         {
-            for (int i = startIndex; i < _childrenList.Count; ++i)
+            for (int i = startIndex; i < _nodes.Count; ++i)
             {
-                NodeBehaviour node = _childrenList[startIndex];
+                NodeBehaviour node = _nodes[startIndex];
                 UpdateStatus status = node.Update();
                 if (status == UpdateStatus.Running)
                 {

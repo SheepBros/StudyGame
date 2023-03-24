@@ -6,6 +6,8 @@ namespace SB.Util
 {
     public class FloatReactiveProperty : IComparable<FloatReactiveProperty>
     {
+        public event Action<float> OnValueChanged;
+        
         public float Value
         {
             get => _value;
@@ -27,7 +29,15 @@ namespace SB.Util
 
         private float _value;
 
-        public event Action<float> OnValueChanged;
+        public FloatReactiveProperty()
+        {
+            _value = default;
+        }
+
+        public FloatReactiveProperty(float value)
+        {
+            _value = value;
+        }
 
         public int CompareTo(FloatReactiveProperty other)
         {

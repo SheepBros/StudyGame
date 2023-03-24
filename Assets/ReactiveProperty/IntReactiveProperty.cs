@@ -5,6 +5,8 @@ namespace SB.Util
 {
     public class IntReactiveProperty : IComparable<IntReactiveProperty>
     {
+        public event Action<int> OnValueChanged;
+        
         public int Value
         {
             get => _value;
@@ -26,7 +28,15 @@ namespace SB.Util
 
         private int _value;
 
-        public event Action<int> OnValueChanged;
+        public IntReactiveProperty()
+        {
+            _value = default;
+        }
+
+        public IntReactiveProperty(int value)
+        {
+            _value = value;
+        }
 
         public int CompareTo(IntReactiveProperty other)
         {

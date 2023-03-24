@@ -1,5 +1,4 @@
-﻿using System;
-using SB.Util;
+﻿using SB.Util;
 using TRTS.Unit;
 using UnityEngine;
 
@@ -13,16 +12,20 @@ namespace TRTS.Ability
 
         public float Speed { get; private set; }
 
-        private BoolReactiveProperty IsMoving { get; } = new();
+        public BoolReactiveProperty IsMoving { get; } = new();
 
-        private IUnit _target;
+        public bool TargetUnitMoving { get; private set; }
 
-        private Vector3 _targetPosition;
+        public Vector3 TargetPosition { get; private set; }
+
+        private ITargetableUnit _targetableUnit;
 
         public MoveAbility(IUnit owner, float speed)
         {
             Owner = owner;
             Speed = speed;
+            
+            _targetableUnit = Owner as ITargetableUnit;
         }
 
         public bool IsAvailable()
@@ -30,9 +33,17 @@ namespace TRTS.Ability
             return true;
         }
 
-        public void Use()
+        public void MoveToTarget()
         {
-            IsMoving.Value = true;
+            TargetUnitMoving = true;
+            IsMoving.Value = !HasArrived();
+        }
+
+        public void MoveToLocation(Vector3 location)
+        {
+            TargetPosition = location;
+            TargetUnitMoving = false;
+            IsMoving.Value = !HasArrived();
         }
 
         public void Update()
@@ -41,43 +52,52 @@ namespace TRTS.Ability
             {
                 return;
             }
-
-            Vector3 length;
-            float destinationSize = 0;
-            if (_target != null)
-            {
-                length = _target.Position - Owner.Position;
-                destinationSize = _target.Size;
-            }
-            else
-            {
-                length = _targetPosition - Owner.Position;
-            }
-
-            if (length.sqrMagnitude < destinationSize * destinationSize)
+            
+            if (HasArrived())
             {
                 Stop();
                 return;
             }
             
-            Vector3 distance = length.normalized;
+            Vector3 distance = GetTargetLength().normalized;
             CurrentVelocity = distance * Speed;
+        }
+
+        public bool HasArrived()
+        {
+            Vector3 length = GetTargetLength();
+            float destinationSize = GetDestinationSize();
+            return length.sqrMagnitude < destinationSize * destinationSize;
         }
 
         public void Stop()
         {
             IsMoving.Value = false;
-            _target = null;
         }
 
-        public void SetTarget(IUnit target)
+        private Vector2 GetTargetLength()
         {
-            _target = target;
+            Vector3 length;
+            if (TargetUnitMoving && _targetableUnit.Target != null)
+            {
+                length = _targetableUnit.Target.Position - Owner.Position;
+            }
+            else if (!TargetUnitMoving)
+            {
+                length = TargetPosition - Owner.Position;
+            }
+            else
+            {
+                length = Vector3.zero;
+            }
+
+            return length;
         }
 
-        public void SetPosition(Vector3 position)
+        private float GetDestinationSize()
         {
-            _targetPosition = position;
+            return TargetUnitMoving && _targetableUnit.Target != null ?
+                _targetableUnit.Target.Size + Owner.Size : 0;
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using TRTS;
-using TRTS.Unit;
-
-namespace FSM.Test
+﻿namespace FSM.Test
 {
     public class WorkerFsm
     {

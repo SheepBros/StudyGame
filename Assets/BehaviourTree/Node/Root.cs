@@ -5,21 +5,34 @@ namespace TRTS.BehaviourTree
     [Serializable]
     public class Root : NodeBehaviour
     {
-        private NodeBehaviour _child;
+        public Root(string name) : base(name)
+        {
+        }
         
         public override UpdateStatus Update()
         {
-            return _child.Update();
+            foreach (NodeBehaviour node in _nodes)
+            {
+                node.Update();
+            }
+
+            return UpdateStatus.Success;
         }
 
         public override void PreUpdate()
         {
-            _child.PreUpdate();
+            foreach (NodeBehaviour node in _nodes)
+            {
+                node.PreUpdate();
+            }
         }
 
         public override void PostUpdate()
         {
-            _child.PostUpdate();
+            foreach (NodeBehaviour node in _nodes)
+            {
+                node.PostUpdate();
+            }
         }
     }
 }

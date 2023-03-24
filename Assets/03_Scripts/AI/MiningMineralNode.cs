@@ -6,11 +6,11 @@ namespace TRTS.AI
 {
     public class MiningMineralNode : NodeBehaviour
     {
-        private IAbilityUnit _unit;
+        private ICharacterUnit _unit;
 
         private MiningAbility _miningAbility;
         
-        public MiningMineralNode(IAbilityUnit unit)
+        public MiningMineralNode(string name, ICharacterUnit unit) : base(name)
         {
             _unit = unit;
             _miningAbility = _unit.GetAbility<MiningAbility>();
@@ -19,6 +19,12 @@ namespace TRTS.AI
         public override UpdateStatus Update()
         {
             if (!_miningAbility.IsAvailable())
+            {
+                return UpdateStatus.Failure;
+            }
+
+            if (_unit.Target == null ||
+                _unit.Target is not MineralUnit mineralUnit)
             {
                 return UpdateStatus.Failure;
             }
@@ -39,18 +45,17 @@ namespace TRTS.AI
                 return UpdateStatus.Success;
             }
 
-            _miningAbility.Use();
+            _miningAbility.SetMine(_unit, mineralUnit);
+            _miningAbility.StartMine();
             return UpdateStatus.Running;
         }
 
         public override void PreUpdate()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void PostUpdate()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
