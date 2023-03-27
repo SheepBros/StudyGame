@@ -32,10 +32,10 @@ namespace TRTS.Ability
 
         public bool IsAvailable()
         {
-            return true;
+            return MinedAmount <= 0;
         }
 
-        public void StartMine()
+        public void StartMining()
         {
             if (!IsMineralMinable())
             {
@@ -46,6 +46,12 @@ namespace TRTS.Ability
             CurrentMiningTime = 0;
         }
 
+        public void StopMining()
+        {
+            IsMining.Value = false;
+            CurrentMiningTime = 0;
+        }
+
         public void Update()
         {
             if (!IsMining)
@@ -53,6 +59,7 @@ namespace TRTS.Ability
                 return;
             }
 
+            Debug.LogError($"Mining: {!IsMineralMinable()} / {!IsInDistance()} {CurrentMiningTime} >= {MiningTime}");
             if (!IsMineralMinable() ||
                 !IsInDistance())
             {
@@ -67,6 +74,7 @@ namespace TRTS.Ability
                 IsMining.Value = false;
                 CurrentMiningTime = 0;
                 MinedAmount = TargetMineral.Mining(MiningAmount);
+                TargetMineral = null;
             }
         }
         

@@ -28,7 +28,10 @@ namespace SB
             Container.BindAs<UpdatableManager>();
             Container.BindAs<DisposableManager>();
 
-            this.gameObject.AddComponent<MonoLifeCycle>();
+            if (gameObject.GetComponent<MonoLifeCycle>() == null)
+            {
+                gameObject.AddComponent<MonoLifeCycle>();
+            }
 
             InstallInternal();
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using TRTS.Ability;
-using TRTS.BehaviourTree;
+using TRTS.BT;
 using TRTS.Unit;
 
 namespace TRTS.AI

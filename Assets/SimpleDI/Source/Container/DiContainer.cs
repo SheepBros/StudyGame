@@ -60,11 +60,34 @@ namespace SB
             BindAllInterfacesFrom<T>(instance, bindToParents);
         }
 
+        public void BindAllInterfacesAndSelf<T>(bool bindToParents = false, params object[] args) where T : class
+        {
+            Type type = typeof(T);
+            object instance = InstantiateInternal(type, args);
+            Bind(type, true, bindToParents, instance);
+            BindAllInterfacesFrom<T>(instance, bindToParents);
+        }
+
         public void BindAllInterfacesFrom<T>(object instance, bool bindToParents = false) where T : class
         {
             Type type = typeof(T);
             Type[] interfaceTypes = type.GetInterfaces();
 
+            for (int i = 0; i < interfaceTypes.Length; ++i)
+            {
+                Type interfaceType = interfaceTypes[i];
+                bool canBeSingle = !_typeOfLifeCycleInterfaces.Contains(interfaceType);
+                Bind(interfaceType, canBeSingle, bindToParents, instance);
+            }
+        }
+
+        public void BindAllInterfacesFromAndSelf<T>(object instance, bool bindToParents = false) where T : class
+        {
+            Type type = typeof(T);
+            Type[] interfaceTypes = type.GetInterfaces();
+
+            Bind(type, true, bindToParents, instance);
+            
             for (int i = 0; i < interfaceTypes.Length; ++i)
             {
                 Type interfaceType = interfaceTypes[i];

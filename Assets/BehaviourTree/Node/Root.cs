@@ -1,6 +1,7 @@
 ﻿using System;
+using UnityEngine;
 
-namespace TRTS.BehaviourTree
+namespace TRTS.BT
 {
     [Serializable]
     public class Root : NodeBehaviour

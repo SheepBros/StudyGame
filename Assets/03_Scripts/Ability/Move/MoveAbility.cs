@@ -73,6 +73,7 @@ namespace TRTS.Ability
         public void Stop()
         {
             IsMoving.Value = false;
+            CurrentVelocity = Vector2.zero;
         }
 
         private Vector2 GetTargetLength()

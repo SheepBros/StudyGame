@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using UnityEngine;
 
-namespace TRTS.BehaviourTree
+namespace TRTS.BT
 {
     [Serializable]
     public class Sequence : NodeBehaviour, IComposite
@@ -21,13 +21,18 @@ namespace TRTS.BehaviourTree
                 UpdateStatus status = _runningNode.Update();
                 if (status == UpdateStatus.Success)
                 {
-                    ResetRunningNode();
                     return UpdateNode(_runningNodeIndex + 1);
+                }
+                
+                if (status == UpdateStatus.Failure)
+                {
+                    ResetRunningNode();
                 }
                 
                 return status;
             }
             
+            ResetRunningNode();
             return UpdateNode(0);
         }
 
@@ -51,7 +56,7 @@ namespace TRTS.BehaviourTree
         {
             for (int i = startIndex; i < _nodes.Count; ++i)
             {
-                NodeBehaviour node = _nodes[startIndex];
+                NodeBehaviour node = _nodes[i];
                 UpdateStatus status = node.Update();
                 if (status == UpdateStatus.Running)
                 {
@@ -62,10 +67,12 @@ namespace TRTS.BehaviourTree
 
                 if (status == UpdateStatus.Failure)
                 {
+                    _runningNode = null;
                     return UpdateStatus.Failure;
                 }
             }
-
+            
+            _runningNode = null;
             return UpdateStatus.Success;
         }
 

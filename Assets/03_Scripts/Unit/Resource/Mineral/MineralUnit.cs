@@ -4,7 +4,9 @@ namespace TRTS.Unit
 {
     public class MineralUnit : IUnit, IMineralResource
     {
-        public Vector3 Position => _unitObject.Position;
+        public Vector3 Position => UnitObject.Position;
+        
+        public IUnitObject UnitObject { get; private set; }
 
         public float Size { get; }
 
@@ -14,17 +16,15 @@ namespace TRTS.Unit
         
         public IUnit MiningUnit { get; private set; }
 
-        private IUnitObject _unitObject;
-
         public MineralUnit(int amount)
         {
             Amount = amount;
-            Size = 2f;
+            Size = 0.8f;
         }
 
         public void SetObject(IUnitObject unitObject)
         {
-            _unitObject = unitObject;
+            UnitObject = unitObject;
         }
 
         public void Start()

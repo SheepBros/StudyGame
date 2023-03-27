@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TRTS
 {
-    public class GameContext : MonoBehaviour
+    public class GameContext : MonoBehaviour, IInjectable
     {
         private GameManager _gameManager;
         

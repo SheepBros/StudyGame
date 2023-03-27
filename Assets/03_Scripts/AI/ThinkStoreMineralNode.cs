@@ -1,19 +1,26 @@
 ﻿using TRTS.Ability;
-using TRTS.BehaviourTree;
+using TRTS.BT;
 using TRTS.Unit;
+using UnityEngine;
 
 namespace TRTS.AI
 {
-    public class HasMineralNode : NodeBehaviour
+    public class ThinkStoreMineralNode : NodeBehaviour
     {
-        private IAbilityUnit _unit;
+        private GameManager _gameManager;
+        
+        private ICharacterUnit _unit;
 
         private MiningAbility _miningAbility;
-        
-        public HasMineralNode(string name, IAbilityUnit unit) : base(name)
+
+        private MoveAbility _moveAbility;
+
+        public ThinkStoreMineralNode(string name, GameManager gameManager, ICharacterUnit unit) : base(name)
         {
+            _gameManager = gameManager;
             _unit = unit;
             _miningAbility = _unit.GetAbility<MiningAbility>();
+            _moveAbility = _unit.GetAbility<MoveAbility>();
         }
 
         public override UpdateStatus Update()
@@ -22,8 +29,9 @@ namespace TRTS.AI
             {
                 return UpdateStatus.Failure;
             }
-            
-            return _miningAbility.MinedAmount > 0 ? UpdateStatus.Success : UpdateStatus.Failure;
+
+            _unit.SetTarget(_gameManager.BaseCenter);
+            return UpdateStatus.Success;
         }
 
         public override void PreUpdate()

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using TRTS.Ability;
-using TRTS.BehaviourTree;
+using TRTS.BT;
 using TRTS.Unit;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace TRTS.AI
 
         private MoveAbility _moveAbility;
 
-        public SearchMineralNode(GameManager gameManager, string name, ICharacterUnit unit) : base(name)
+        public SearchMineralNode(string name, GameManager gameManager, ICharacterUnit unit) : base(name)
         {
             _gameManager = gameManager;
             _unit = unit;
@@ -34,11 +34,16 @@ namespace TRTS.AI
                     return UpdateStatus.Failure;
                 }
             }
+
+            if (_unit.Target is MineralUnit)
+            {
+                return UpdateStatus.Success;
+            }
             
             List<MineralUnit> availableMineList = null;
-            for (int i = 0; i < _gameManager.MineralList.Count; i++)
+            for (int i = 0; i < _gameManager.MineralUnits.Count; i++)
             {
-                if (_gameManager.MineralList[i] is not MineralUnit mineral)
+                if (_gameManager.MineralUnits[i] is not MineralUnit mineral)
                 {
                     continue;
                 }

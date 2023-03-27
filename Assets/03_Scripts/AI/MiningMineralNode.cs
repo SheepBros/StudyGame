@@ -1,13 +1,14 @@
 ﻿using TRTS.Ability;
-using TRTS.BehaviourTree;
+using TRTS.BT;
 using TRTS.Unit;
+using UnityEngine;
 
 namespace TRTS.AI
 {
     public class MiningMineralNode : NodeBehaviour
     {
         private ICharacterUnit _unit;
-
+        
         private MiningAbility _miningAbility;
         
         public MiningMineralNode(string name, ICharacterUnit unit) : base(name)
@@ -28,15 +29,14 @@ namespace TRTS.AI
             {
                 return UpdateStatus.Failure;
             }
-
-            bool inDistance = _miningAbility.IsInDistance();
-            if (!inDistance)
-            {
-                return UpdateStatus.Failure;
-            }
             
             if (_miningAbility.IsMining)
             {
+                if (!_miningAbility.IsInDistance())
+                {
+                    return UpdateStatus.Failure;
+                }
+                
                 return UpdateStatus.Running;
             }
 
@@ -46,7 +46,7 @@ namespace TRTS.AI
             }
 
             _miningAbility.SetMine(_unit, mineralUnit);
-            _miningAbility.StartMine();
+            _miningAbility.StartMining();
             return UpdateStatus.Running;
         }
 

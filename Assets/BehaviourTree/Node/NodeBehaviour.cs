@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace TRTS.BehaviourTree
+namespace TRTS.BT
 {
     [Serializable]
     public abstract class NodeBehaviour : IEquatable<NodeBehaviour>
     {
-        protected readonly string _name;
+        public readonly string _name;
         
         protected List<NodeBehaviour> _nodes = new ();
 

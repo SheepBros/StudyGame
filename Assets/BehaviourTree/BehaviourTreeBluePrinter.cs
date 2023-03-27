@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
-namespace TRTS.BehaviourTree
+namespace TRTS.BT
 {
     public class BehaviourTreeBluePrinter
     {
@@ -18,24 +19,23 @@ namespace TRTS.BehaviourTree
         public BehaviourTreeBluePrinter Start(string rootName)
         {
             _root = new Root(rootName);
-            _nodeStack.Push(_root);
             _currentPointer = _root;
             return this;
         }
 
-        public NodeBehaviour End()
+        public BehaviourTree End()
         {
-            Root root = _root;
-            _root = null;
+            BehaviourTree controller = new (_root);
             _nodeStack.Clear();
+            _root = null;
             _currentPointer = null;
-            return root;
+            return controller;
         }
 
         public BehaviourTreeBluePrinter AddNode(NodeBehaviour node)
         {
             _currentPointer.AddNode(node);
-            _nodeStack.Push(node);
+            _nodeStack.Push(_currentPointer);
             _currentPointer = node;
             return this;
         }

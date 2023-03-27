@@ -8,24 +8,25 @@ namespace TRTS.Unit
     {
         public Vector3 Position { get; }
 
+        public IUnitObject UnitObject { get; private set; }
+
         public float Size { get; }
 
         public List<IAbility> Abilities { get; } = new();
 
         private GameManager _gameManager;
 
-        private IUnitObject _unitObject;
-
         public BaseCenterUnit(GameManager gameManager)
         {
             _gameManager = gameManager;
             
-            Size = 4f;
+            Size = 1f;
+            Abilities.Add(new StoreResourceAbility(_gameManager, 0.25f));
         }
 
         public void SetObject(IUnitObject unitObject)
         {
-            _unitObject = unitObject;
+            UnitObject = unitObject;
         }
 
         public void Start()

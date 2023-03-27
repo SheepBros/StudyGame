@@ -6,6 +6,8 @@ namespace TRTS.Unit
     {
         Vector3 Position { get; }
         
+        IUnitObject UnitObject { get; }
+
         float Size { get; }
 
         void SetObject(IUnitObject unitObject);

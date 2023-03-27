@@ -25,8 +25,6 @@ namespace TRTS
 
         private AbilityComponentManager _abilityComponentManager;
 
-        //private Dictionary<Type, Action<IUnit, Vector3>> _instantiateTable = new();
-
         private Dictionary<Type, GameObject> _instantiateTable = new();
 
         private List<GameObject> _objectList = new();
@@ -42,12 +40,8 @@ namespace TRTS
 
         public void Initialize()
         {
-            _gameEventManager.Register<UnitCreatedEvent>(OnUnitCreated);
+            _gameEventManager.Register<PrepareUnitsEvent>(OnPrepareUnits);
             
-            // TODO: 개선 요망.
-            // _instantiateTable.Add(typeof(WorkerUnit), new PrefabInfo(_workerPrefab, InstantiateWorker));
-            // _instantiateTable.Add(typeof(BaseCenterUnit), new PrefabInfo(_baseCenterPrefab, InstantiateBaseCenter));
-            // _instantiateTable.Add(typeof(MineralUnit), new PrefabInfo(_mineralPrefab, InstantiateMineral));
             _instantiateTable.Add(typeof(WorkerUnit), _workerPrefab);
             _instantiateTable.Add(typeof(BaseCenterUnit), _baseCenterPrefab);
             _instantiateTable.Add(typeof(MineralUnit), _mineralPrefab);
@@ -55,28 +49,11 @@ namespace TRTS
 
         public void Dispose()
         {
-            _gameEventManager.Unregister<UnitCreatedEvent>(OnUnitCreated);
+            _gameEventManager.Unregister<PrepareUnitsEvent>(OnPrepareUnits);
         }
 
-        private void OnUnitCreated(UnitCreatedEvent eventData)
+        public void SetUpUnit(UnitObject unitObject, IUnit unit)
         {
-            if (eventData == null)
-            {
-                return;
-            }
-
-            Type unitType = eventData.Unit.GetType();
-            if (_instantiateTable.ContainsKey(unitType))
-            {
-                //_instantiateTable[unitType].InstantiateEvent.Invoke(eventData.Unit, eventData.Position);
-                InstantiateUnit(_instantiateTable[unitType], eventData.Unit, eventData.Position);
-            }
-        }
-
-        private void InstantiateUnit(GameObject prefab, IUnit unit, Vector3 position)
-        {
-            GameObject instance = Instantiate(prefab, position, Quaternion.identity);
-            UnitObject unitObject = instance.GetComponent<UnitObject>();
             unitObject.SetUp(unit);
 
             if (unit is IAbilityUnit abilityUnit)
@@ -87,44 +64,47 @@ namespace TRTS
                 }
             }
             
-            _objectList.Add(instance);
+            _objectList.Add(unitObject.gameObject);
         }
 
-        private void InstantiateWorker(IUnit unit, Vector3 position)
+        private void OnPrepareUnits(PrepareUnitsEvent eventData)
         {
-            GameObject unitObject = Instantiate(_workerPrefab, position, Quaternion.identity);
-            WorkerObject workerObject = unitObject.GetComponent<WorkerObject>();
-            workerObject.SetUp(unit);
-            _objectList.Add(unitObject);
-        }
-
-        private void InstantiateBaseCenter(IUnit unit, Vector3 position)
-        {
-            GameObject unitObject = Instantiate(_baseCenterPrefab, position, Quaternion.identity);
-            BaseCenterObject baseCenterObject = unitObject.GetComponent<BaseCenterObject>();
-            baseCenterObject.SetUp(unit);
-            _objectList.Add(unitObject);
-        }
-
-        private void InstantiateMineral(IUnit unit, Vector3 position)
-        {
-            GameObject unitObject = Instantiate(_mineralPrefab, position, Quaternion.identity);
-            MineralObject mineralObject = unitObject.GetComponent<MineralObject>();
-            mineralObject.SetUp(unit);
-            _objectList.Add(unitObject);
-        }
-
-        private class PrefabInfo
-        {
-            public readonly GameObject Prefab;
-
-            public readonly Action<IUnit, Vector3> InstantiateEvent;
-
-            public PrefabInfo(GameObject prefab, Action<IUnit, Vector3> instantiateEvent)
+            foreach (IUnit unit in _gameManager.Units)
             {
-                Prefab = prefab;
-                InstantiateEvent = instantiateEvent;
+                if (unit.UnitObject == null)
+                {
+                    InstantiateUnit(unit);
+                }
             }
+            
+            foreach (IUnit unit in _gameManager.MineralUnits)
+            {
+                if (unit.UnitObject == null)
+                {
+                    InstantiateUnit(unit);
+                }
+            }
+
+            if (_gameManager.BaseCenter.UnitObject == null)
+            {
+                InstantiateUnit(_gameManager.BaseCenter);
+            }
+        }
+
+        private void InstantiateUnit(IUnit unit)
+        {
+            Type unitType = unit.GetType();
+            if (_instantiateTable.ContainsKey(unitType))
+            {
+                InstantiateUnit(_instantiateTable[unitType], unit, unit.Position);
+            }
+        }
+
+        private void InstantiateUnit(GameObject prefab, IUnit unit, Vector3 position)
+        {
+            GameObject instance = Instantiate(prefab, position, Quaternion.identity);
+            UnitObject unitObject = instance.GetComponent<UnitObject>();
+            SetUpUnit(unitObject, unit);
         }
     }
 }

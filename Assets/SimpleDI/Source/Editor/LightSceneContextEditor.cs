@@ -1,5 +1,7 @@
 ﻿using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SB
 {
@@ -32,6 +34,7 @@ namespace SB
             if (GUILayout.Button("Search & Register in scene"))
             {
                 _lightSceneContext.RegisterAllInjectInstancesInScene();
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
             }
         }
     }

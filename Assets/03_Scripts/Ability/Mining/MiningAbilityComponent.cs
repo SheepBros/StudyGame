@@ -8,6 +8,16 @@ namespace TRTS.Ability
         private MiningAbility _ability;
 
         private UnitObject _unitObject;
+
+        private void Update()
+        {
+            if (_ability == null)
+            {
+                return;
+            }
+            
+            _ability.Update();
+        }
         
         public bool SetUp(UnitObject unitObject, IAbility ability)
         {

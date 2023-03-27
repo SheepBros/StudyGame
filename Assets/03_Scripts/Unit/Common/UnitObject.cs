@@ -8,10 +8,10 @@ namespace TRTS.Unit
 
         public IUnit Unit { get; private set; }
 
-        public Rigidbody Rigidbody => _rigidbody;
+        public Rigidbody2D Rigidbody => _rigidbody;
 
         [SerializeField]
-        private Rigidbody _rigidbody;
+        private Rigidbody2D _rigidbody;
 
         protected Transform _transform;
 

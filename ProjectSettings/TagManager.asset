@@ -11,11 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Props
+  - Resources
+  - Building
+  - Unit
   - 
   - 
   - 
@@ -40,4 +40,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 2420211795
+    locked: 0
+  - name: Props
+    uniqueID: 2060881969
+    locked: 0
+  - name: Resources
+    uniqueID: 1419590213
+    locked: 0
+  - name: Building
+    uniqueID: 3598539381
+    locked: 0
+  - name: Unit
+    uniqueID: 1577066089
     locked: 0

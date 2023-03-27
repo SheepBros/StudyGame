@@ -1,5 +1,5 @@
 ﻿using TRTS.Ability;
-using TRTS.BehaviourTree;
+using TRTS.BT;
 using TRTS.Unit;
 using UnityEngine;
 

@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using TRTS.Ability;
+using TRTS.BT;
 using UnityEngine;
 
 namespace TRTS.Unit
 {
     public class WorkerUnit : ICharacterUnit
     {
-        public Vector3 Position => _unitObject.Position;
+        public Vector3 Position => UnitObject.Position;
+
+        public IUnitObject UnitObject { get; private set; }
 
         public float Size { get; private set; }
 
@@ -17,27 +20,24 @@ namespace TRTS.Unit
         public IResource Resource { get; set; }
 
         private readonly GameManager _gameManager;
-
-        //private readonly WorkerFsm _ai;
-
-        private IUnitObject _unitObject;
-
+        
+        private BehaviourTree _behaviourTree;
+        
         private bool _patrolling;
-
+        
         public WorkerUnit(GameManager gameManager)
         {
             _gameManager = gameManager;
 
-            Size = 2f;
+            Size = 0.5f;
 
-            //_ai = new WorkerFsm(_gameManager, this);
             Abilities.Add(new MoveAbility(this, 2f));
             Abilities.Add(new MiningAbility(this, 0.5f, 5, 3f));
         }
 
         public void SetObject(IUnitObject unitObject)
         {
-            _unitObject = unitObject;
+            UnitObject = unitObject;
         }
 
         public TAbility GetAbility<TAbility>() where TAbility : class, IAbility
@@ -55,17 +55,21 @@ namespace TRTS.Unit
 
         public void Start()
         {
-            //_ai.Start();
         }
 
         public void Update()
         {
-            //_ai.Update();
+            _behaviourTree.Update();
         }
 
         public void SetTarget(IUnit target)
         {
             Target = target;
+        }
+
+        public void SetAI(BehaviourTree behaviourTree)
+        {
+            _behaviourTree = behaviourTree;
         }
     }
 }

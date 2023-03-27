@@ -2,7 +2,7 @@
 using SB;
 using SB.Util;
 using TRTS.AI;
-using TRTS.BehaviourTree;
+using TRTS.BT;
 using TRTS.Event;
 using TRTS.Unit;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace TRTS
         
         public List<IUnit> Units { get; } = new();
         
-        public List<IUnit> MineralList { get; } = new();
+        public List<IUnit> MineralUnits { get; } = new();
         
         public IBuildingUnit BaseCenter { get; private set; }
         
@@ -29,17 +29,14 @@ namespace TRTS
 
         public void Start()
         {
-            CreateBaseCenter();
-            CreateWorker();
-            CreateMineral(new Vector3(-5f, 0, 0));
-            CreateMineral(new Vector3(6f, 0, 0));
+            _gameEventManager.Fire(new PrepareUnitsEvent());
             
             foreach (IUnit unit in Units)
             {
                 unit.Start();
             }
             
-            foreach (IUnit mineral in MineralList)
+            foreach (IUnit mineral in MineralUnits)
             {
                 mineral.Start();
             }
@@ -53,37 +50,39 @@ namespace TRTS
             }
         }
 
-        private void CreateWorker()
+        public WorkerUnit CreateWorker()
         {
             WorkerUnit worker = new WorkerUnit(this);
             BehaviourTreeBluePrinter aiBluePrinter = new BehaviourTreeBluePrinter();
             aiBluePrinter.Start("root").
                 AddNode(new Selector("selector")).
                     AddNode(new Sequence("store_mineral_sequence")).
-                        AddNode(new HasMineralNode("mined_mineral", worker)).
+                        AddNode(new ThinkStoreMineralNode("think_store_mineral", this, worker)).PointerUp().
                         AddNode(new GoToNode("go_base_center", worker, typeof(BaseCenterUnit))).PointerUp().
-                        AddNode(new StoreMineralNode(this, "go_store_mined_mineral", worker)).
+                        AddNode(new StoreMineralNode(this, "go_store_mined_mineral", worker)).PointerUp().PointerUp().
                     AddNode(new Sequence("mining_sequence")).
-                        AddNode(new SearchMineralNode(this, "search_mineral", worker)).PointerUp().
+                        AddNode(new SearchMineralNode("search_mineral", this, worker)).PointerUp().
                         AddNode(new GoToNode("go_mineral", worker, typeof(MineralUnit))).PointerUp().
                         AddNode(new MiningMineralNode("mining", worker));
 
-            _gameEventManager.Fire(new UnitCreatedEvent(worker, BaseCenter.Position));
+            BehaviourTree behaviourTree = aiBluePrinter.End();
+            worker.SetAI(behaviourTree);
+            
             Units.Add(worker);
+            return worker;
         }
 
-        private void CreateMineral(Vector3 position)
+        public MineralUnit CreateMineral()
         {
-            IUnit mineral = new MineralUnit(1000);
-            _gameEventManager.Fire(new UnitCreatedEvent(mineral, position));
-            MineralList.Add(mineral);
+            MineralUnit mineral = new MineralUnit(1000);
+            MineralUnits.Add(mineral);
+            return mineral;
         }
 
-        private void CreateBaseCenter()
+        public IBuildingUnit CreateBaseCenter()
         {
             BaseCenter = new BaseCenterUnit(this);
-            _gameEventManager.Fire(new UnitCreatedEvent(BaseCenter, Vector3.zero));
-            Units.Add(BaseCenter);
+            return BaseCenter;
         }
     }
 }

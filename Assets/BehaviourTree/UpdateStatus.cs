@@ -1,4 +1,4 @@
-﻿namespace TRTS.BehaviourTree
+﻿namespace TRTS.BT
 {
     public enum UpdateStatus
     {

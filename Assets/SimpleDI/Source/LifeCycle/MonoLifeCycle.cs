@@ -7,7 +7,7 @@ namespace SB
     /// It's automatically attached to a gameobject by Context when the context is initialized.
     /// </summary>
     [ExecutionOrder(-8900)]
-    public class MonoLifeCycle : MonoBehaviour
+    public class MonoLifeCycle : MonoBehaviour, IInjectable
     {
         private InitializableManager _initializableManager;
 
