@@ -18,7 +18,7 @@ namespace SB
             {
                 if (_instance == null)
                 {
-                    Instatiate();
+                    Instantiate();
                 }
 
                 return _instance;
@@ -30,7 +30,7 @@ namespace SB
         [SerializeField]
         public List<MonoInstaller> _monoInstallers;
 
-        private static void Instatiate()
+        private static void Instantiate()
         {
             GameObject prefab = Resources.Load<GameObject>("PersistentContext");
             if (prefab == null)

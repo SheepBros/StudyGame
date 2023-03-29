@@ -3,14 +3,14 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SB
+namespace TRTS.UI
 {
     [InitializeOnLoad]
-    public class LightSceneContextAutoRegister
+    public class UIContentAutoCollectEditor
     {
         private const bool AutoRegister = true;
 
-        static LightSceneContextAutoRegister()
+        static UIContentAutoCollectEditor()
         {
             if (!AutoRegister)
             {
@@ -31,13 +31,14 @@ namespace SB
             GameObject[] rootObjects = scene.GetRootGameObjects();
             foreach (GameObject rootObject in rootObjects)
             {
-                LightSceneContext lightSceneContext = rootObject.GetComponentInChildren<LightSceneContext>();
-                if (lightSceneContext != null)
+                UIContentHandler uiContentHandler = rootObject.GetComponentInChildren<UIContentHandler>();
+                if (uiContentHandler != null)
                 {
-                    lightSceneContext.RegisterAllInjectInstancesInScene();
-                    if (PrefabUtility.IsPartOfAnyPrefab(lightSceneContext))
+                    uiContentHandler.CollectAllUIContents();
+
+                    if (PrefabUtility.IsPartOfAnyPrefab(uiContentHandler))
                     {
-                        PrefabUtility.RecordPrefabInstancePropertyModifications(lightSceneContext);
+                        PrefabUtility.RecordPrefabInstancePropertyModifications(uiContentHandler);
                     }
                 }
             }
