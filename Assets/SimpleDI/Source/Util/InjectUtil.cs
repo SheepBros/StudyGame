@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SB.Util
 {
@@ -24,7 +25,7 @@ namespace SB.Util
         {
             Type type = instance.GetType();
             MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
-
+            
             List<MethodInfo> methodList = new List<MethodInfo>();
             foreach (MethodInfo method in methods)
             {

@@ -59,7 +59,6 @@ namespace TRTS.Ability
                 return;
             }
 
-            Debug.LogError($"Mining: {!IsMineralMinable()} / {!IsInDistance()} {CurrentMiningTime} >= {MiningTime}");
             if (!IsMineralMinable() ||
                 !IsInDistance())
             {

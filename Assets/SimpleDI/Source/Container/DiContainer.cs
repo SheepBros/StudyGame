@@ -219,7 +219,15 @@ namespace SB
         public GameObject InstantiatePrefab(GameObject prefab)
         {
             GameObject instance = GameObject.Instantiate(prefab);
-            InjectUtil.InjectWithContainer(this, instance);
+            MonoBehaviour[] monoBehaviours = instance.GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (MonoBehaviour monoBehaviour in monoBehaviours)
+            {
+                if (monoBehaviour is IInjectable)
+                {
+                    InjectUtil.InjectWithContainer(this, monoBehaviour);
+                }
+            }
+            
             return instance;
         }
 

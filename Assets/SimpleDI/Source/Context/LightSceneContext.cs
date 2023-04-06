@@ -14,7 +14,10 @@ namespace SB
         {
             foreach (MonoBehaviour instance in _initialInjectInstances)
             {
-                Container.Inject(instance);
+                if (instance != null)
+                {
+                    Container.Inject(instance);
+                }
             }
         }
 
@@ -28,7 +31,7 @@ namespace SB
             GameObject[] rootGameObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (GameObject rootGameObject in rootGameObjects)
             {
-                MonoBehaviour[] monoBehaviours = rootGameObject.GetComponentsInChildren<MonoBehaviour>();
+                MonoBehaviour[] monoBehaviours = rootGameObject.GetComponentsInChildren<MonoBehaviour>(true);
                 foreach (MonoBehaviour monoBehaviour in monoBehaviours)
                 {
                     if (monoBehaviour is IInjectable)

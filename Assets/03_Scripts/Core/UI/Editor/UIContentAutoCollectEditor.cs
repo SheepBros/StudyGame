@@ -31,7 +31,7 @@ namespace TRTS.UI
             GameObject[] rootObjects = scene.GetRootGameObjects();
             foreach (GameObject rootObject in rootObjects)
             {
-                UIContentHandler uiContentHandler = rootObject.GetComponentInChildren<UIContentHandler>();
+                UIContentHandler uiContentHandler = rootObject.GetComponentInChildren<UIContentHandler>(true);
                 if (uiContentHandler != null)
                 {
                     uiContentHandler.CollectAllUIContents();
