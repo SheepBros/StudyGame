@@ -1,4 +1,6 @@
-﻿namespace TRTS.Unit
+﻿using UnityEngine;
+
+namespace TRTS.Unit
 {
     public class WorkerObject : UnitObject
     {

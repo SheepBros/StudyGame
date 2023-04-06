@@ -14,9 +14,9 @@ namespace TRTS.Unit
 
         public List<IAbility> Abilities { get; } = new();
 
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
 
-        public BaseCenterUnit(GameManager gameManager)
+        public BaseCenterUnit(IGameManager gameManager)
         {
             _gameManager = gameManager;
             

@@ -19,13 +19,13 @@ namespace TRTS.Unit
 
         public IResource Resource { get; set; }
 
-        private readonly GameManager _gameManager;
+        private readonly IGameManager _gameManager;
         
         private BehaviourTree _behaviourTree;
         
         private bool _patrolling;
         
-        public WorkerUnit(GameManager gameManager)
+        public WorkerUnit(IGameManager gameManager)
         {
             _gameManager = gameManager;
 

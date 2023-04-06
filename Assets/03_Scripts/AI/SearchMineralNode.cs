@@ -8,7 +8,7 @@ namespace TRTS.AI
 {
     public class SearchMineralNode : NodeBehaviour
     {
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
 
         private ICharacterUnit _unit;
 
@@ -16,7 +16,7 @@ namespace TRTS.AI
 
         private MoveAbility _moveAbility;
 
-        public SearchMineralNode(string name, GameManager gameManager, ICharacterUnit unit) : base(name)
+        public SearchMineralNode(string name, IGameManager gameManager, ICharacterUnit unit) : base(name)
         {
             _gameManager = gameManager;
             _unit = unit;

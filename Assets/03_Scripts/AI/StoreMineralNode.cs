@@ -7,7 +7,7 @@ namespace TRTS.AI
 {
     public class StoreMineralNode : NodeBehaviour
     {
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
         
         private ICharacterUnit _unit;
 
@@ -15,7 +15,7 @@ namespace TRTS.AI
 
         private MoveAbility _moveAbility;
         
-        public StoreMineralNode(GameManager gameManager, string name, ICharacterUnit unit) : base(name)
+        public StoreMineralNode(IGameManager gameManager, string name, ICharacterUnit unit) : base(name)
         {
             _gameManager = gameManager;
             _unit = unit;

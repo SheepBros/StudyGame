@@ -19,9 +19,9 @@ namespace TRTS
         [SerializeField]
         private GameObject _mineralPrefab;
         
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
 
-        private GameEventManager _gameEventManager;
+        private IGameEventManager _gameEventManager;
 
         private AbilityComponentManager _abilityComponentManager;
 
@@ -30,7 +30,7 @@ namespace TRTS
         private List<GameObject> _objectList = new();
         
         [Inject]
-        public void InjectBindings(GameManager gameManager, GameEventManager gameEventManager,
+        public void InjectBindings(IGameManager gameManager, IGameEventManager gameEventManager,
             AbilityComponentManager abilityComponentManager)
         {
             _gameManager = gameManager;

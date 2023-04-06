@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SB.Util;
+using UnityEngine;
 
 namespace TRTS.Unit
 {
@@ -10,15 +11,15 @@ namespace TRTS.Unit
 
         public float Size { get; }
 
-        public bool AvailableMining => Amount > 0;
+        public bool AvailableMining => Amount.Value > 0;
 
-        public int Amount { get; private set; }
+        public IntReactiveProperty Amount { get; }
         
         public IUnit MiningUnit { get; private set; }
 
         public MineralUnit(int amount)
         {
-            Amount = amount;
+            Amount = new (amount);
             Size = 0.8f;
         }
 
@@ -48,14 +49,14 @@ namespace TRTS.Unit
             }
             
             int minedMinerals = amount;
-            if (Amount < amount)
+            if (Amount.Value < amount)
             {
-                minedMinerals = Amount;
-                Amount = 0;
+                minedMinerals = Amount.Value;
+                Amount.Value = 0;
             }
             else
             {
-                Amount -= amount;
+                Amount.Value -= amount;
             }
 
             return minedMinerals;

@@ -8,9 +8,9 @@ namespace TRTS.Ability
         
         public float StorableLength { get; private set; }
 
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
 
-        public StoreResourceAbility(GameManager gameManager, float storableLength)
+        public StoreResourceAbility(IGameManager gameManager, float storableLength)
         {
             _gameManager = gameManager;
             StorableLength = storableLength;

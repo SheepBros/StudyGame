@@ -1,13 +1,12 @@
 ﻿using TRTS.Ability;
 using TRTS.BT;
 using TRTS.Unit;
-using UnityEngine;
 
 namespace TRTS.AI
 {
     public class ThinkStoreMineralNode : NodeBehaviour
     {
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
         
         private ICharacterUnit _unit;
 
@@ -15,7 +14,7 @@ namespace TRTS.AI
 
         private MoveAbility _moveAbility;
 
-        public ThinkStoreMineralNode(string name, GameManager gameManager, ICharacterUnit unit) : base(name)
+        public ThinkStoreMineralNode(string name, IGameManager gameManager, ICharacterUnit unit) : base(name)
         {
             _gameManager = gameManager;
             _unit = unit;

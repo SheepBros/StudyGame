@@ -5,11 +5,10 @@ using TRTS.AI;
 using TRTS.BT;
 using TRTS.Event;
 using TRTS.Unit;
-using UnityEngine;
 
 namespace TRTS
 {
-    public class GameManager
+    public class GameManager : IGameManager
     {
         public IntReactiveProperty Minerals { get; } = new();
         
@@ -19,10 +18,10 @@ namespace TRTS
         
         public IBuildingUnit BaseCenter { get; private set; }
         
-        private GameEventManager _gameEventManager;
+        private IGameEventManager _gameEventManager;
         
         [Inject]
-        public void InjectBindings(GameEventManager gameEventManager)
+        public void InjectBindings(IGameEventManager gameEventManager)
         {
             _gameEventManager = gameEventManager;
         }

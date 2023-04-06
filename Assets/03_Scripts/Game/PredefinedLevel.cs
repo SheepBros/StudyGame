@@ -11,10 +11,10 @@ namespace TRTS
 
         private ObjectSpawnManager _objectSpawnManager;
 
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
 
         [Inject]
-        public void InjectBindings(GameManager gameManager, ObjectSpawnManager objectSpawnManager)
+        public void InjectBindings(IGameManager gameManager, ObjectSpawnManager objectSpawnManager)
         {
             _gameManager = gameManager;
             _objectSpawnManager = objectSpawnManager;

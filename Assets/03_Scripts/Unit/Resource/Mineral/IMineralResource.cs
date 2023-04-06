@@ -1,8 +1,10 @@
-﻿namespace TRTS.Unit
+﻿using SB.Util;
+
+namespace TRTS.Unit
 {
     public interface IMineralResource
     {
-        int Amount { get; }
+        IntReactiveProperty Amount { get; }
 
         int Mining(int amount);
     }

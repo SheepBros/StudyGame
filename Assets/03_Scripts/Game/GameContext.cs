@@ -5,10 +5,10 @@ namespace TRTS
 {
     public class GameContext : MonoBehaviour, IInjectable
     {
-        private GameManager _gameManager;
+        private IGameManager _gameManager;
         
         [Inject]
-        public void InjectBindings(GameManager gameManager)
+        public void InjectBindings(IGameManager gameManager)
         {
             _gameManager = gameManager;
         }

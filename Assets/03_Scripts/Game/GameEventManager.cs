@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TRTS
 {
-    public class GameEventManager
+    public class GameEventManager : IGameEventManager
     {
         private readonly Dictionary<Type, object> _eventTable = new ();
 

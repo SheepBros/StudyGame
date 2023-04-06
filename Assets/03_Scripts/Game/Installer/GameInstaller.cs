@@ -16,8 +16,7 @@ namespace TRTS
 
         public override void InstallBindings()
         {
-            _container.BindAllInterfacesAndSelf<GameManager>();
-            _container.BindAllInterfacesAndSelf<GameEventManager>();
+            _container.BindAllInterfaces<GameManager>();
             _container.BindAllInterfacesFromAndSelf<ObjectSpawnManager>(_objectSpawnManager);
             _container.BindAllInterfacesFromAndSelf<AbilityComponentManager>(_abilityComponentManager);
             _container.BindAllInterfacesFromAndSelf<PredefinedLevel>(_predefinedLevel);
